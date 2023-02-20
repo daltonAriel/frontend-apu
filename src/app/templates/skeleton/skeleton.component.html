@@ -1,0 +1,93 @@
+<mat-drawer-container class="example-container" autosize [hasBackdrop]="true">
+
+    <mat-drawer #drawer class="example-sidenav" mode="push">
+
+        <img class="avatar" src="assets/logo-white.png" />
+        <hr>
+
+
+        <button mat-button class="menu-button">
+            <span>Home</span>
+        </button>
+
+        <button mat-button class="menu-button">
+            <span>Home</span>
+        </button>
+
+        <br>
+
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <span class="menu-button">Home</span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <button mat-button class="menu-button">
+                    <span>Home</span>
+                </button>
+
+                <button mat-button class="menu-button">
+                    <span>Home</span>
+                </button>
+
+                <button mat-button class="menu-button" [routerLink]="['example']">
+                    <span>Home example</span>
+                </button>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Menu1
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <button mat-button class="menu-button">
+                    <span>Home</span>
+                </button>
+
+            </mat-expansion-panel>
+
+
+        </mat-accordion>
+
+
+
+
+    </mat-drawer>
+
+
+
+    <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #20315F;">
+        <div class="container-fluid">
+
+            <button class="navbar-toggler" type="button" (click)="drawer.toggle()" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <a class="navbar-brand mx-auto navbar-toggler m-0 p-0" href="#">
+                <img src="assets/logo-white-expand.svg" height="55" alt="" loading="lazy" />
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup" mdbCollapse #noListNav="mdbCollapse">
+                <div class="navbar-nav align-items-center">
+                    <a class="navbar-brand mx-auto m-0 p-0" href="#">
+                        <img src="assets/logo-white.png" height="50" alt="" loading="lazy" />
+                    </a>
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" href="#">Features</a>
+                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <router-outlet></router-outlet>
+
+</mat-drawer-container>

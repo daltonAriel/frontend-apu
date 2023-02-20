@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+.dense-1 {
+  @include mat.all-component-densities(-1);
+}
+
+.dense-2 {
+  @include mat.all-component-densities(-2);
+}
