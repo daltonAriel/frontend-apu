@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
       if (!global_token) {
         return true;
       }
-      return false;
+      this.router.navigate(['/home']);
     }
 
     //verifica si el jwt esta en localStorage sino redirige al login

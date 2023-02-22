@@ -29,8 +29,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
+import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple';
+import { GestionUnidadesComponent } from './components/gestion-unidades/gestion-unidades.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,8 @@ import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
     LoginComponent,
     HomeComponent,
     SkeletonComponent,
-    FooterComponent
+    FooterComponent,
+    GestionUnidadesComponent
   ],
   imports: [
     BrowserModule,
@@ -60,8 +64,10 @@ import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
     MatIconModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
 
     MdbCollapseModule,
+    MdbRippleModule,
 
     NgxWebstorageModule.forRoot(),
     NgxPermissionsModule.forRoot(),

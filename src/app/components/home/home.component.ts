@@ -57,7 +57,6 @@ export class HomeComponent implements OnInit{
 	//------------------------------
 	// Variables CRUD
 	//------------------------------
-	proyectoID: number | null = null;
 
 
 	//------------------------------

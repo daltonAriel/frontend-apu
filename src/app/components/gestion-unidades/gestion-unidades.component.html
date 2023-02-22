@@ -1,0 +1,258 @@
+<div class="container mt-2">
+
+    <div class="row text-center">
+        <h4>Gestion de Unidades</h4>
+    </div>
+
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-2 justify-content-center">
+        <div class="col">
+            <form [formGroup]="filtersForm">
+                <div class="input-group mb-3">
+                    <input formControlName="cadenaBusqueda" (keyup.enter)="obtenerUnidades()" type="search"
+                        class="form-control" placeholder="Buscar...">
+                    <button mdbRipple (click)="obtenerUnidades()" class="btn btn-light py-0 shadow-none shadow-2 border"
+                        type="button" id="button-addon2">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="d-flex mb-1">
+            <button mdbRipple type="button" class="btn btn-light btn-sm btn-rounded shadow-none"
+                (click)="basicCollapse.toggle()" [attr.aria-expanded]="!basicCollapse.collapsed"
+                aria-controls="collapseExample"><i class="fa-solid fa-sliders"></i>
+                Filtros
+            </button>
+        </div>
+
+
+        <div class="mt-3" id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
+            <div class="row">
+                <div class="col dense-2">
+                    <form [formGroup]="filtersForm">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Estado</mat-label>
+                            <mat-select formControlName="estado" (selectionChange)="obtenerUnidades()">
+                                <mat-option></mat-option>
+                                <mat-option [value]="true">Habilitado</mat-option>
+                                <mat-option [value]="false">Deshabilitado</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <hr class="mt-2">
+    </div>
+
+    <div class="mb-3">
+        <button *ngIf="!saveLoaderUnidad" type="button" class="btn btn-outline-primary btn-sm btn-rounded shadow-none"
+            mdbRipple rippleColor="dark" (click)="openNuevo(nueva_unidad)">
+            <i class="fa-solid fa-circle-plus btnIcon"></i> Nuevo
+        </button>
+    </div>
+
+    <div class="table-container table-hover">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="bg-light">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Abreviatura</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let unidad of listaUnidades; let i = index">
+                        <th scope="row" class="align-middle ">{{(paginationSize*paginationIndex)+(i+1)}}</th>
+                        <td class="align-middle">{{unidad.saun_abreviatura}}</td>
+                        <td class="align-middle">{{unidad.saun_descripcion}}</td>
+                        <td class="align-middle">
+                            <span *ngIf="unidad.saun_estado == true; else saun_false" class="badge badge-success rounded-pill d-inline">Habilitado</span>
+                            <ng-template #saun_false>
+                                <span class="badge badge-danger rounded-pill d-inline">Deshabilitado</span>
+                            </ng-template>
+                        </td>
+                        <td class="align-middle">
+                            <div class="flex-column text-center">
+                                <button (click)="eliminarUnidad(unidad.saun_codigo)" type="button" class="btn btn-outline-secondary btn-rounded btn-sm text-danger m-1" mdbRipple
+                                    rippleColor="danger">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                                <button (click)="openActualizar(actualizar_unidad, unidad)" type="button" class="btn btn-outline-secondary btn-rounded btn-sm m-1" mdbRipple
+                                    rippleColor="primary">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="mainLoaderUnidad || false" class="overlay">
+            <div class="spinner-border text-primary center-spin animate__animated animate__backInDown" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3 dense-2">
+        <mat-paginator #unidad_pagination [length]=totalElements [pageSize]=paginationSize
+            [pageSizeOptions]=paginationOptions (page)="pageEventChange($event)" aria-label="Select page">
+        </mat-paginator>
+    </div>
+
+
+</div>
+
+
+<ng-template #nueva_unidad let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Nueva Unidad</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="unidadForm">
+            <div class="mb-3">
+
+                <div class="col-sm-12 col-md-6 mb-4 dense-2">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Abreviatura</mat-label>
+                        <input matInput formControlName="saun_abreviatura">
+                        <mat-error class="mb-5"
+                            *ngIf="unidadForm.controls['saun_abreviatura'].hasError('required') || unidadForm.controls['saun_abreviatura'].hasError('pattern')">
+                            Abreviatura requerido
+                        </mat-error>
+                        <mat-error class="mb-5" *ngIf="unidadForm.controls['saun_abreviatura'].hasError('maxlength')">
+                            El numero maximo de caracteres es 255
+                        </mat-error>
+                        <mat-error class="mb-5" *ngIf="unidadForm.controls['saun_abreviatura'].hasError('campoRepetido')">
+                            Esta abreviatura ya existe
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                
+                <div class="col mb-4 dense-2">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Descripcion</mat-label>
+                        <input matInput formControlName="saun_descripcion">
+                        <mat-error class="mb-5"
+                            *ngIf="unidadForm.controls['saun_descripcion'].hasError('required') || unidadForm.controls['saun_descripcion'].hasError('pattern')">
+                            Descripcion requerida
+                        </mat-error>
+                        <mat-error class="mb-5" *ngIf="unidadForm.controls['saun_descripcion'].hasError('maxlength')">
+                            El numero maximo de caracteres es 255
+                        </mat-error>
+                        <mat-error class="mb-5" *ngIf="unidadForm.controls['saun_descripcion'].hasError('campoRepetido')">
+                            Esta descripcion ya existe
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="col mb-4 dense-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Seleccione el estado</mat-label>
+                        <mat-select formControlName="saun_estado">
+                          <mat-option [value]="true">Habilitado</mat-option>
+                          <mat-option [value]="false">Deshabilitado</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+
+        <button *ngIf="!saveLoaderUnidad" mdbRipple rippleColor="dark" type="button" class="btn btn-outline-dark mx-1"
+            (click)="modal.close('Save click')">Cancelar</button>
+
+        <button [disabled]="saveLoaderUnidad || unidadForm.status == 'INVALID' || unidadForm.status == 'PENDING'"
+            mdbRipple rippleColor="dark" type="button" class="btn btn-outline-success mx-1" (click)="guardarUnidad()">
+            <span *ngIf="saveLoaderUnidad" class="spinner-border spinner-border-sm"></span> Guardar
+        </button>
+
+    </div>
+</ng-template>
+
+
+<ng-template #actualizar_unidad let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Actualizar Unidad</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="unidadForm">
+            <div class="mb-3">
+
+                <div class="col mb-4">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Abreviatura</mat-label>
+                        <textarea matInput formControlName="saun_abreviatura"></textarea>
+                        <mat-error class="mb-5"
+                            *ngIf="unidadForm.controls['saun_abreviatura'].hasError('required') || unidadForm.controls['saun_abreviatura'].hasError('pattern')">
+                            Abreviatura requerido
+                        </mat-error>
+                        <mat-error class="mb-5" *ngIf="unidadForm.controls['saun_abreviatura'].hasError('maxlength')">
+                            El numero maximo de caracteres es 255
+                        </mat-error>
+                        <mat-error class="mb-5" *ngIf="unidadForm.controls['saun_abreviatura'].hasError('campoRepetido')">
+                            Esta abreviatura ya existe
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                
+                <div class="col mb-4">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Descripcion</mat-label>
+                        <textarea matInput formControlName="saun_descripcion"></textarea>
+                        <mat-error class="mb-5"
+                            *ngIf="unidadForm.controls['saun_descripcion'].hasError('required') || unidadForm.controls['saun_descripcion'].hasError('pattern')">
+                            Descripcion requerida
+                        </mat-error>
+                        <mat-error class="mb-5" *ngIf="unidadForm.controls['saun_descripcion'].hasError('maxlength')">
+                            El numero maximo de caracteres es 255
+                        </mat-error>
+                        <mat-error class="mb-5" *ngIf="unidadForm.controls['saun_descripcion'].hasError('campoRepetido')">
+                            Esta descripcion ya existe
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="col mb-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Seleccione el estado</mat-label>
+                        <mat-select formControlName="saun_estado">
+                          <mat-option [value]="true">Habilitado</mat-option>
+                          <mat-option [value]="false">Deshabilitado</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+
+        <button *ngIf="!saveLoaderUnidad" mdbRipple rippleColor="dark" type="button" class="btn btn-outline-dark mx-1"
+            (click)="modal.close('Save click')">Cancelar</button>
+
+        <button [disabled]="saveLoaderUnidad || unidadForm.status == 'INVALID' || unidadForm.status == 'PENDING'"
+            mdbRipple rippleColor="dark" type="button" class="btn btn-outline-success mx-1" (click)="actualizarUnidad()">
+            <span *ngIf="saveLoaderUnidad" class="spinner-border spinner-border-sm"></span> Guardar
+        </button>
+
+    </div>
+</ng-template>

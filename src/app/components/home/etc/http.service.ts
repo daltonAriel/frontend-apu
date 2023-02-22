@@ -93,12 +93,12 @@ export class HttpService {
         control.setValue('');
       }
       if (_id == null || _id == undefined) {
-        if(await this.nombreDescripcion(control.value)){
+        if(await this.nombreValidacion(control.value)){
           return { campoRepetido: true };
         }
         return null;
       } else {
-        if(await this.nombreDescripcionId(control.value, _id)){
+        if(await this.nombreValidacionId(control.value, _id)){
           return { campoRepetido: true };
         }
         return null;
@@ -108,8 +108,7 @@ export class HttpService {
 
 
 
-  private nombreDescripcion(_descripcion: string):any {
-    console.log(_descripcion);
+  private nombreValidacion(_descripcion: string):any {
     return this.axiosHttp
       .getCancelToken(`${API_URL}/proyecto/validador-nombre?nombre=${_descripcion}`)
       .then((res) => {
@@ -124,7 +123,7 @@ export class HttpService {
 
 
 
-  private nombreDescripcionId(_descripcion: string, _id: number): any {
+  private nombreValidacionId(_descripcion: string, _id: number): any {
     return this.axiosHttp
       .getCancelToken(`${API_URL}/proyecto/validador-nombre/${_id}?nombre=${_descripcion}`)
       .then((res) => {

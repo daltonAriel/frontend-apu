@@ -54,6 +54,7 @@ export class AxiosHttpService {
   }
 
   private cancelToken: any;
+  private cancelToken2: any;
 
   public get(url: string) {
     return axios.get(url);
@@ -79,6 +80,15 @@ export class AxiosHttpService {
     }
     this.cancelToken = axios.CancelToken.source();
     return axios.get(url, { cancelToken: this.cancelToken.token });
+  }
+
+  
+  public getCancelToken2(url: string): Promise<any> {
+    if (this.cancelToken2) {
+      this.cancelToken2.cancel("Peticion http cancelada!");
+    }
+    this.cancelToken2 = axios.CancelToken.source();
+    return axios.get(url, { cancelToken: this.cancelToken2.token });
   }
 
 }
